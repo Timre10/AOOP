@@ -25,9 +25,47 @@ void HamsterClient::nextStep(QString previousResponse)
     if (step % 5 == 3) params["txt"] = "linksUm";
     if (step % 5 == 4) params["txt"] = "linksUm";
     if (step % 5 == 0 && step != 0) params["txt"] = "linksUm";
-    cout << "Test" << endl;
     step++;
     http->post("http://turing.iem.thm.de/chatJava/sendTxt.php", params);
 }
 
+void HamsterClient::set_rotation(int end_rotation){
+    int rotation = this->current_rotation;
+    int i = this->current_rotation;
+    while(i != end_rotation){
+        //HTTP-Anfrage hier rein für 90° Drehung anzeigen
+        if(rotation < 3){
+            rotation++;
+        }
+        else{
+            rotation = 0;
+        }
+        i++;
+    }
+    this->current_rotation = rotation;
+}
 
+void HamsterClient::walk(int end_rotation){
+    set_rotation(end_rotation);
+    //HTTP Aanfrage einfügen für grade aus laufen
+}
+
+void HamsterClient::goToCorn(){
+    string Laufstring = "rrruu";
+    int länge = Laufstring.length();
+
+    for( int i = 0; i < länge; i++){
+        char zeichen = ((char)Laufstring[i]);
+        switch(zeichen){
+            case 'r': walk(1);
+                break;
+            case 'u': walk(2);
+                break;
+            case 'l': walk(3);
+                break;
+            case 'o': walk(0);
+                break;
+        }
+    }
+    corn++;
+}

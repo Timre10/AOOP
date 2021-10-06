@@ -12,6 +12,7 @@ class HttpClient : public QObject
 Q_OBJECT
   QNetworkAccessManager *manager;
 
+
 private slots:
   void replyFinished(QNetworkReply *);
 
