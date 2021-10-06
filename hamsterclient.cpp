@@ -25,7 +25,7 @@ void HamsterClient::nextStep(QString previousResponse)
     if (step % 5 == 3) params["txt"] = "linksUm";
     if (step % 5 == 4) params["txt"] = "linksUm";
     if (step % 5 == 0 && step != 0) params["txt"] = "linksUm";
-    cout << "Test" << endl;
+    cout << "Test " << endl;
     step++;
     http->post("http://turing.iem.thm.de/chatJava/sendTxt.php", params);
 }
