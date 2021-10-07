@@ -2,6 +2,7 @@ QT += core
 QT -= gui
 QT += network
 QT += core5compat
+QT += testlib
 
 CONFIG += c++11 console
 CONFIG -= app_bundle
