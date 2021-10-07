@@ -1,10 +1,12 @@
 #include <iostream>
-
-#include "hamsterclient.h"
 #include <string.h>
 #include <chrono>
 #include <thread>
 #include <QSignalSpy>
+
+#include "hamsterclient.h"
+//#include "map.h"
+#include "map.cpp"
 
 using namespace std;
 using namespace std::this_thread;
@@ -16,13 +18,17 @@ void HamsterClient::start()
 {
     connect(http, SIGNAL(responseAvailable(QString)), this, SLOT(hamsterInit(QString)));
     hamsterInit("Start");
+    return;
 }
 
 void HamsterClient::hamsterInit(QString previousResponse) {
-    char nutzdaten_string[1000];
+    char width_string[3], height_string[3];
+    char nutzdaten_string[1600];
+    string usedata = "";
     int nutzdaten_index;
     int size = previousResponse.size();
     int number_of_rows = 0;
+    int charsize_of_nutzdaten = 2;
     QChar c = '\n';
     QChar c_prev;
     int character_number_of_http_response = 3;
@@ -137,7 +143,6 @@ void HamsterClient::hamsterInit(QString previousResponse) {
                         break;
                 }
                 nutzdaten_string[nutzdaten_index] = '\0';
-                //cout << nutzdaten_string << endl;
 
                 /* Is the parameter the color? */
                 if(strncmp(nutzdaten_string, "farbe: ", 6) == 0) {
@@ -147,13 +152,45 @@ void HamsterClient::hamsterInit(QString previousResponse) {
                 }
                 /* Is the parameter the map? */
                 if(strncmp(nutzdaten_string, "territorium: ", 13) == 0) {
-                    // todo hier Map initialisieren. Map ist in nutzdaten_string enthalten
-                    cout << nutzdaten_string << endl;
+                    int index_of_nutzdaten = 13;
+                    char c;
+                    c = (char)nutzdaten_string[index_of_nutzdaten];
+                    width_string[0] = c;
+                    index_of_nutzdaten++;
+                    c = (char)nutzdaten_string[index_of_nutzdaten];
+                    if (c != 32) {
+                      width_string[1] = c;
+                      index_of_nutzdaten++;
+                      width_string[2] = '\0';
+                    }
+                    else width_string[1] = '\0';
+                    index_of_nutzdaten++;
+                    c = nutzdaten_string[index_of_nutzdaten];
+                    height_string[0] = c;
+                    index_of_nutzdaten++;
+                    c = (char)nutzdaten_string[index_of_nutzdaten];
+                    if (c != 32) {
+                      height_string[1] = c;
+                      index_of_nutzdaten++;
+                      height_string[2] = '\0';
+                    }
+                    else height_string[1] = '\0';
+
+
+                    if (height_string[1] != '\0') charsize_of_nutzdaten++;
+                    if (width_string[1] != '\0') charsize_of_nutzdaten++;
+                    char* usedata_p = &nutzdaten_string[15 + charsize_of_nutzdaten];
+                    for (int u = 0; u < 1600; u++) {
+                        usedata = usedata + usedata_p[u];
+                    }
+                    usedata.erase(remove(usedata.begin(),usedata.end(),' '),usedata.end());
                 }
             }
         }
         this->step++;
-        goToCorn();
+        Map * territorium = new Map(usedata, atoi(width_string), atoi(height_string));
+        goToCorn(territorium->algorythm(usedata));
+        return;
     }
 }
 
@@ -197,8 +234,7 @@ void HamsterClient::walk(int end_rotation){
 
 }
 
-void HamsterClient::goToCorn(){
-    string Laufstring = "";
+void HamsterClient::goToCorn(string Laufstring){
     int laenge = Laufstring.length();
     for( int i = 0; i < laenge; i++){
         char zeichen = ((char)Laufstring[i]);
@@ -214,4 +250,5 @@ void HamsterClient::goToCorn(){
         }
     }
     corn++;
+    return;
 }

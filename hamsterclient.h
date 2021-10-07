@@ -6,6 +6,8 @@
 
 #include "httpclient.h"
 
+class Map;
+
 using namespace std;
 
 class HamsterClient : public QObject
@@ -14,7 +16,7 @@ class HamsterClient : public QObject
 public:
     HamsterClient(HttpClient *);
     void start();
-    void goToCorn();
+    void goToCorn(string);
 
 private slots:
     void hamsterInit(QString);
