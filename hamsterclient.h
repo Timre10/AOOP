@@ -16,7 +16,6 @@ class HamsterClient : public QObject
 public:
     HamsterClient(HttpClient *);
     void start();
-    void goToCorn(string);
 
 private slots:
     void hamsterInit(QString);
@@ -29,9 +28,11 @@ private:
     int current_rotation = 1;
     int corn = 0;
 
+    void goToCorn(string);
+    void walk(int);
     void set_rotation(int);
 
-    void walk(int);
+
 
 };
 

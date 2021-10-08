@@ -16,6 +16,14 @@ HamsterClient::HamsterClient(HttpClient *http) : http(http) {}
 
 void HamsterClient::start()
 {
+    string a = "";
+    while (a != "j") {
+        a.clear();
+        cout << "Kann der Hamster starten? \"j\" fuer ja!" << endl;
+        cin >> a;
+        if (a != "j") cout << "Okay, dann warte ich." << endl;
+    }
+    cout << "Geht los!" << endl << endl;
     connect(http, SIGNAL(responseAvailable(QString)), this, SLOT(hamsterInit(QString)));
     hamsterInit("Start");
     return;
@@ -250,5 +258,6 @@ void HamsterClient::goToCorn(string Laufstring){
         }
     }
     corn++;
+    cout << endl << endl << "Hamster ist angekommen. Nomnomnom." << endl;
     return;
 }

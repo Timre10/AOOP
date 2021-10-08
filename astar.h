@@ -55,6 +55,7 @@ namespace AStar
 
     class Heuristic
     {
+    private:
         static Vec2i getDelta(Vec2i source_, Vec2i target_);
 
     public:
